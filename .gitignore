@@ -1,0 +1,15 @@
+node_modules
+.next
+out
+coverage
+.playwright-browsers
+playwright-report
+test-results
+.lighthouseci
+*.log
+.env*
+!.env.example
+*.tsbuildinfo
+.pytest_cache
+__pycache__
+*.py[cod]
