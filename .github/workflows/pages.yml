@@ -96,7 +96,7 @@ jobs:
       - name: Configurar o GitHub Pages
         uses: actions/configure-pages@v6
       - name: Enviar o artefato de publicação
-        uses: actions/upload-pages-artifact@v4
+        uses: actions/upload-pages-artifact@v5
         with:
           path: out
       - name: Publicar no GitHub Pages
