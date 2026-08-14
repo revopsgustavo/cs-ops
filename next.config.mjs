@@ -6,5 +6,6 @@ const nextConfig = {
   allowedDevOrigins: ['127.0.0.1'],
   basePath: isGitHubPages ? '/cs-ops' : '',
   assetPrefix: isGitHubPages ? '/cs-ops/' : undefined,
+  trailingSlash: isGitHubPages,
 };
 export default nextConfig;
