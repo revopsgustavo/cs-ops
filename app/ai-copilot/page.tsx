@@ -1,1 +1,1 @@
-import {Dashboard} from '@/components/dashboard';export default function Page(){return <Dashboard initialPage="AI Copilot"/>}
+import {Dashboard} from '@/components/dashboard';export default function Page(){return <Dashboard initialPage="Copiloto de IA"/>}

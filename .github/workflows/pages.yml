@@ -1,4 +1,4 @@
-name: Quality gates and GitHub Pages
+name: Portões de qualidade e publicação
 
 on:
   push:
@@ -18,36 +18,57 @@ concurrency:
 
 jobs:
   quality:
+    name: Validação de qualidade
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: pnpm/action-setup@v4
+      - name: Baixar o código
+        uses: actions/checkout@v4
+      - name: Configurar o pnpm
+        uses: pnpm/action-setup@v4
         with:
           version: 11.19.0
-      - uses: actions/setup-node@v4
+      - name: Configurar o Node.js
+        uses: actions/setup-node@v4
         with:
           node-version: 22
           cache: pnpm
-      - uses: actions/setup-python@v5
+      - name: Configurar o Python
+        uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-      - run: python -m pip install -r requirements-dev.txt
-      - run: pnpm install --frozen-lockfile
-      - run: pnpm typecheck
-      - run: pnpm lint
-      - run: pnpm test
-      - run: python src/generate_data.py
-      - run: python src/consultant_gap_finder.py
-      - run: python src/ai_consultant.py
-      - run: python src/data_quality.py
-      - run: python src/reports.py
-      - run: python -m compileall src app
-      - run: python -m pytest
-      - run: pnpm build
-      - run: pnpm exec playwright install --with-deps chromium
-      - run: pnpm test:e2e:prod
+      - name: Instalar as dependências Python
+        run: python -m pip install -r requirements-dev.txt
+      - name: Instalar as dependências Node.js
+        run: pnpm install --frozen-lockfile
+      - name: Verificar os tipos
+        run: pnpm typecheck
+      - name: Verificar a qualidade do código
+        run: pnpm lint
+      - name: Executar os testes unitários
+        run: pnpm test
+      - name: Validar a geração de dados
+        run: python src/generate_data.py
+      - name: Validar a consultoria de lacunas
+        run: python src/consultant_gap_finder.py
+      - name: Validar o consultor de IA
+        run: python src/ai_consultant.py
+      - name: Validar a qualidade dos dados
+        run: python src/data_quality.py
+      - name: Validar os relatórios
+        run: python src/reports.py
+      - name: Compilar os módulos Python
+        run: python -m compileall src app
+      - name: Executar os testes Python
+        run: python -m pytest
+      - name: Gerar a aplicação estática
+        run: pnpm build
+      - name: Instalar o navegador de testes
+        run: pnpm exec playwright install --with-deps chromium
+      - name: Executar os testes de ponta a ponta
+        run: pnpm test:e2e:prod
 
   deploy:
+    name: Publicação no GitHub Pages
     if: github.event_name != 'pull_request'
     needs: quality
     environment:
@@ -55,21 +76,29 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: pnpm/action-setup@v4
+      - name: Baixar o código
+        uses: actions/checkout@v4
+      - name: Configurar o pnpm
+        uses: pnpm/action-setup@v4
         with:
           version: 11.19.0
-      - uses: actions/setup-node@v4
+      - name: Configurar o Node.js
+        uses: actions/setup-node@v4
         with:
           node-version: 22
           cache: pnpm
-      - run: pnpm install --frozen-lockfile
-      - run: pnpm build
+      - name: Instalar as dependências
+        run: pnpm install --frozen-lockfile
+      - name: Gerar a aplicação estática
+        run: pnpm build
         env:
           DEPLOY_TARGET: github-pages
-      - uses: actions/configure-pages@v5
-      - uses: actions/upload-pages-artifact@v3
+      - name: Configurar o GitHub Pages
+        uses: actions/configure-pages@v5
+      - name: Enviar o artefato de publicação
+        uses: actions/upload-pages-artifact@v3
         with:
           path: out
-      - id: deployment
+      - name: Publicar no GitHub Pages
+        id: deployment
         uses: actions/deploy-pages@v4

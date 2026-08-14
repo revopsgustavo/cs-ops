@@ -1,1 +1,1 @@
-import {Dashboard} from '@/components/dashboard';export default function Page(){return <Dashboard initialPage="Health Score"/>}
+import {Dashboard} from '@/components/dashboard';export default function Page(){return <Dashboard initialPage="Índice de Saúde"/>}

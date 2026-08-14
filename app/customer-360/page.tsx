@@ -1,1 +1,1 @@
-import {Dashboard} from '@/components/dashboard';export default function Page(){return <Dashboard initialPage="Customer 360"/>}
+import {Dashboard} from '@/components/dashboard';export default function Page(){return <Dashboard initialPage="Visão 360 do Cliente"/>}

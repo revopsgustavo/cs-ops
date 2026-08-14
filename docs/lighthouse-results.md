@@ -4,15 +4,15 @@ Data-base da auditoria: 13/08/2026.
 
 ## Escopo configurado
 
-- Executive Cockpit (`/`)
-- Customer 360 (`/customer-360`)
-- Health Score (`/health-score`)
+- Painel Executivo (`/`)
+- Visão 360 do Cliente (`/customer-360`)
+- Índice de Saúde (`/health-score`)
 - 1 execução por URL
-- gates: performance ≥ 0,90; acessibilidade e boas práticas ≥ 0,95; SEO ≥ 0,90
+- portões: desempenho ≥ 0,90; acessibilidade e boas práticas ≥ 0,95; otimização para busca ≥ 0,90
 
 ## Resultado desta estação
 
-O servidor do export estático respondeu HTTP 200 em `http://127.0.0.1:3100/` e o healthcheck do LHCI passou. Com o Chromium local, a navegação, coleta e auditorias da página inicial foram concluídas. O processo falhou durante a limpeza do perfil temporário (`EPERM`) antes de persistir o relatório; por isso, não há conjunto completo de scores publicável.
+O servidor da exportação estática respondeu HTTP 200 em `http://127.0.0.1:3100/` e a verificação de integridade do LHCI passou. Com o Chromium local, a navegação, a coleta e as auditorias da página inicial foram concluídas. O processo falhou durante a limpeza do perfil temporário (`EPERM`) antes de persistir o relatório; por isso, não há conjunto completo de pontuações publicável.
 
 Erro reproduzido pelo `pnpm lighthouse`/LHCI:
 

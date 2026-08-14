@@ -1,1 +1,1 @@
-import {Dashboard} from '@/components/dashboard';export default function Page(){return <Dashboard initialPage="Playbooks"/>}
+import {Dashboard} from '@/components/dashboard';export default function Page(){return <Dashboard initialPage="Guias Operacionais"/>}
