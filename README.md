@@ -98,6 +98,7 @@ Requer Node.js 20+ e Python 3.11+.
 
 ```bash
 pnpm install --frozen-lockfile
+python -m pip install -r requirements-dev.txt
 pnpm dev
 ```
 
