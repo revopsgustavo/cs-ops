@@ -1,5 +1,9 @@
 # Customer Intelligence OS
 
+[![Quality gates and GitHub Pages](https://github.com/revopsgustavo/cs-ops/actions/workflows/pages.yml/badge.svg)](https://github.com/revopsgustavo/cs-ops/actions/workflows/pages.yml)
+
+**[Abrir demonstração](https://revopsgustavo.github.io/cs-ops/)** · [Framework de decisão](docs/decision-framework.md) · [Contratos das métricas](docs/metric-contracts.md)
+
 Sistema especialista conceitual de Customer Success Operations e Revenue Intelligence para uma operação B2B SaaS. O produto transforma sinais de produto, suporte, relacionamento e contrato em uma fila de decisão auditável para retenção e expansão.
 
 ![Executive Cockpit do Customer Intelligence OS](docs/screenshots/cockpit-desktop.png)
@@ -10,13 +14,25 @@ Sistema especialista conceitual de Customer Success Operations e Revenue Intelli
 
 Times de receita costumam ter sinais fragmentados, pouca explicabilidade e ações sem owner. O sistema responde quais clientes precisam de atenção, quais evidências sustentam o risco, quanto MRR está exposto, qual ação deve ser validada e como tornar o processo governado.
 
+| Pergunta executiva | Resposta do produto |
+|---|---|
+| Qual receita está exposta? | MRR em risco reconciliado com a carteira |
+| Onde concentrar capacidade? | Fila explicável com score de prioridade |
+| Por que agir? | Sinais positivos, negativos e contribuição dos componentes |
+| Quem age e quando? | Próxima ação, owner e SLA |
+| Onde expandir com segurança? | Gate conservador separado do valor potencial |
+| Quanto confiar? | Confiança do dado separada da saúde do cliente |
+
 ## Arquitetura
 
 ```text
-src/data.ts (36 contas sintéticas)
-   └── src/rules.ts (score, risco, expansão, cenários e filtros)
-         ├── components/dashboard.tsx (10 módulos e interações)
-         └── tests/rules.test.ts (consistência e limites)
+Dados sintéticos determinísticos (src/data.ts)
+    ↓ contratos e tipos
+Regras analíticas puras (src/rules.ts)
+    ↓ score, risco, retenção, expansão e prioridade
+Rotas e interface decisória (app/ + components/)
+    ↓ comportamento verificável
+Vitest + pytest + Playwright + axe + build estático
 ```
 
 Next.js 15, React 19, TypeScript estrito e CSS responsivo. Aplicação exportável como site estático, sem backend, credenciais, API externa ou machine learning. IA e automações são especificações simuladas por regras transparentes, sem execução externa.
@@ -38,6 +54,8 @@ Next.js 15, React 19, TypeScript estrito e CSS responsivo. Aplicação exportáv
 Faixas: crítico 0–39, risco 40–59, atenção 60–79 e saudável 80–100. Entradas inválidas são rejeitadas e os pesos são normalizados pela soma positiva. O MRR em risco soma contas abaixo de 60. Expansão exige saúde, satisfação, pressão de uso, sponsor ativo, suporte sem criticidade e ausência de oportunidade em andamento.
 
 GRR = `(MRR inicial − churn − contração) ÷ MRR inicial`. NRR = `(MRR inicial − churn − contração + expansão realizada + reativação) ÷ MRR inicial`. Potencial de expansão não é contabilizado como receita realizada.
+
+As decisões, falsos positivos, falsos negativos e critérios de evolução estão detalhados no [framework de decisão](docs/decision-framework.md). As definições e os valores reconciliados estão nos [contratos das métricas](docs/metric-contracts.md).
 
 ## Dados, governança e automações
 
@@ -68,6 +86,7 @@ Executive Cockpit, Customer 360, Health Score, Revenue Risk, Expansion Intellige
 - axe sem violações críticas ou sérias nas dez rotas e nos estados de modal, filtros e menu mobile;
 - rotas estáticas independentes com refresh e navegação testados;
 - screenshots regeneráveis por `tests-e2e/screenshots.spec.ts`.
+- pipeline público executa os gates antes de publicar no GitHub Pages.
 
 A auditoria offline de dependências corrigiu os advisories transitivos de `postcss`, `sharp` e `tmp`. Permanece um advisory alto em `extract-zip@2.0.1`, alcançável apenas pela ferramenta de desenvolvimento Lighthouse; a versão corrigida `2.0.2` ainda não está publicada no registro. O pacote não integra o bundle da aplicação nem processa entrada de usuário neste projeto.
 
@@ -109,7 +128,7 @@ Os dados não representam uma empresa real; cenários não são previsões; sina
 
 ## Publicação
 
-O `output: 'export'` gera `out/` com `pnpm build`, adequado a GitHub Pages, Vercel ou outro host estático. Para GitHub Pages, configure uma Action que execute o build e publique `out/`; se usar caminho de projeto, configure `basePath` em `next.config.mjs`.
+O `output: 'export'` gera `out/` com `pnpm build`. O workflow `.github/workflows/pages.yml` executa os gates e somente então publica o artefato estático no GitHub Pages, usando `basePath` específico sem alterar a experiência local.
 
 ## Autor
 
